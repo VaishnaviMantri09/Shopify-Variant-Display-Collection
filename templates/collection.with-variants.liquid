@@ -1,0 +1,132 @@
+{% section 'collection-variations-template' %}
+
+{% assign displayed_colors = '' %}
+{% assign color_count = 0 %}
+{% assign color_list = '' %}
+
+<div class="product-grid-variants">
+  {% for product in collection.products %}
+    {% assign unique_colors = '' %}
+
+    {% for variant in product.variants %}
+      {% assign color = variant.option2 | downcase %}
+
+      {% unless unique_colors contains color %}
+        {% assign unique_colors = unique_colors | append: color | append: ',' %}
+
+        {% assign color_list = color_list | append: color | append: ',' %}
+      {% endunless %}
+    {% endfor %}
+  {% endfor %}
+
+  {% assign sorted_colors = color_list | split: ',' | sort %}
+
+  {% for color in sorted_colors %}
+    {% if color != '' %}
+      <div class="color-group">
+        {% for product in collection.products %}
+          {% assign unique_colors = '' %}
+
+          {% for variant in product.variants %}
+            {% assign variant_color = variant.option2 | downcase %}
+
+            {% if variant_color == color and unique_colors != color %}
+              {% assign unique_colors = unique_colors | append: color %}
+
+              {% assign variant_image = variant.image | default: product.featured_image %}
+
+              <div class="product-card">
+                <a href="{{ product.url | append: '?variant=' | append: variant.id }}">
+                  <div class="product-card-content">
+                    <img
+                      src="{{ variant_image | img_url: 'medium' }}"
+                      alt="{{ product.title }} - {{ color }}"
+                      width="400"
+                      height="500"
+                      loading="lazy"
+                    >
+                    <div class="product-card-title">
+                      <h4>{{ product.title }} - {{ color | capitalize }}</h4>
+                    </div>
+                    <div class="product-card-price">
+                      <p>{{ variant.price | money }}</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<style>
+  .product-grid-variants {
+    display: -webkit-inline-box;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 80px;
+    padding: 10px;
+    justify-items: center;
+    align-items: start;
+    margin-left: 220px;
+  }
+
+  .product-card {
+    width: 100%;
+    max-width: 220px;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    background-color: #fff;
+
+  }
+
+  .product-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .product-card img {
+    width: 600px;
+    height: 250px;
+    display: block;
+    margin-bottom: 5px;
+     object-fit: cover;
+  }
+
+  .product-card-title {
+    margin: 5px 0;
+  }
+
+  .product-card-title h4 {
+    font-size: 17px;
+    margin: 0;
+    margin-left: -16px;
+    margin-right: -10px;
+     cursor: pointer;
+    transition: text-decoration 0.3s ease;
+  }
+
+  .product-card-title h4:hover {
+    text-decoration: underline;
+
+  }
+
+  .product-card-price {
+    margin-top: 5px;
+      margin-left: -16px;
+
+  }
+
+  .product-card-price p {
+    font-size: 16px;
+    color: #69727b;
+    margin: 0;
+    font-weight: bold;
+  }
+</style>
