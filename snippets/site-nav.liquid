@@ -1,0 +1,22 @@
+<ul class="site-nav list--inline {{ nav_alignment }}" id="SiteNav">
+  <li>
+    <a href="/collections/all" class="site-nav__link">Catalog</a>
+  </li>
+  <li>
+    <a href="/collections/standard" class="site-nav__link">Standard</a>
+  </li>
+  <li>
+    <a href="/collections/show-color-variations" class="site-nav__link">Show Color Variations</a>
+  </li>
+</ul>
+
+<style>
+  .site-nav__link:focus,
+  .site-nav__link:active {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: #ccc; /* Light gray line */
+    color: #000; 
+    transition: text-decoration 0.3s ease, text-decoration-color 0.3s ease;
+  }
+</style>
